@@ -5,22 +5,23 @@ class MoviesController < ApplicationController
         movie = Movie.new(title)
         movies = movie.search
 
-        if movies.all?(&:valid?)
+        begin
+            
+            movies_data = []
 
-            if movies.present? && movies.first.valid?
-                first_movie = movies.first
-                movie_data = {
-                    title: first_movie.title,
-        
-                    year: first_movie.year
-                }
-                
-                render json: movie_data
-            else 
-                render json: { error: 'Error: invalid data field' }, status: :bad_request
+            movies.each do |m|
+                if m.title.present? && m.year.present?
+                    movies_data << {
+                        title: m.title,
+                        year: m.year
+                    }
+                else
+                    render json: { error: 'Error: invalid movie title' }, status: :bad_request
+                end
             end
-        else
-        render json: { error: 'Error: invalid movie title' }, status: :bad_request
+            render json: movies_data
+        rescue
+            render json: { error: 'Error: no se encontraron películas con ese título' }, status: :not_found
         end
     end
 end
