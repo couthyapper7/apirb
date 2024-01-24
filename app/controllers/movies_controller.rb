@@ -6,7 +6,7 @@ class MoviesController < ApplicationController
         movies = movie.search
 
         begin
-            
+
             movies_data = []
 
             movies.each do |m|
@@ -21,7 +21,7 @@ class MoviesController < ApplicationController
             end
             render json: movies_data
         rescue
-            render json: { error: 'Error: no se encontraron películas con ese título' }, status: :not_found
+            render json: { error: 'Error: no movies found with that title' }, status: :not_found
         end
     end
 end
